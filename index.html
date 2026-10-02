@@ -1,0 +1,334 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Hoffmann AeroPress Timer</title>
+    <style>
+        :root {
+            --bg-color: #f4f1ea;
+            --text-color: #333;
+            --accent-color: #4a3728; /* Coffee brown */
+            --button-bg: #8b5a2b;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Responsive Header & Mute Button */
+        .header-controls {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        #muteBtn {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        #muteBtn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .container {
+            padding: 10px;
+            max-width: 450px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 0 0 5px 0;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #timer {
+            font-size: 5.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        #instruction {
+            font-size: 1.3rem;
+            min-height: 4.5rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        #startBtn {
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            font-size: 1.3rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.1s, background-color 0.2s;
+            font-weight: bold;
+            width: 100%; /* Full width on mobile for easier tapping */
+            max-width: 280px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #startBtn:hover {
+            background-color: #6f4621;
+        }
+
+        #startBtn:active {
+            transform: scale(0.96);
+        }
+
+        /* Recipe Info Section */
+        .recipe-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 35px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .recipe-card h2 {
+            font-size: 1.15rem;
+            margin-top: 0;
+            color: var(--accent-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            background: #faf8f5;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .recipe-card ol {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .recipe-card li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        /* Buy Me a Coffee Section */
+        .bmc-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .bmc-button img {
+            height: 44px !important;
+            width: 190px !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .bmc-button:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Mobile specific tweaks */
+        @media (max-width: 400px) {
+            h1 { font-size: 1.8rem; }
+            #timer { font-size: 4.5rem; }
+            #instruction { font-size: 1.15rem; min-height: 4rem; }
+            .recipe-meta { flex-direction: column; gap: 5px; }
+            .recipe-card { padding: 15px; }
+            .recipe-card ol { padding-left: 15px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-controls">
+        <button id="muteBtn">🔊 Sound: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>AeroPress Timer</h1>
+        <div class="subtitle">James Hoffmann's Formula</div>
+        
+        <div id="timer">03:00</div>
+        <div id="instruction">Ready? Pour the water and press START immediately!</div>
+        <button id="startBtn">START BREW</button>
+
+        <!-- Recipe Details Card -->
+        <div class="recipe-card">
+            <h2>The Ultimate Recipe Breakdown</h2>
+            <div class="recipe-meta">
+                <span>☕ Coffee: 11g (Medium-Fine)</span>
+                <span>💧 Water: 200g (Boiling)</span>
+            </div>
+            <ol>
+                <li>Put a paper filter in the cap. Assemble and add coffee.</li>
+                <li>Pour 200g of water as quickly as possible.</li>
+                <li>Immediately insert the plunger (~1cm) to create a vacuum seal.</li>
+                <li><strong>[0:00 - 2:00]</strong> Let it steep for 2 minutes.</li>
+                <li><strong>[2:00 - 2:05]</strong> Give it a gentle swirl to drop the crust.</li>
+                <li><strong>[2:05 - 2:35]</strong> Wait 30 seconds for settling.</li>
+                <li><strong>[2:35 - 3:05]</strong> Press down very gently (takes ~30 seconds).</li>
+            </ol>
+        </div>
+
+        <!-- Buy Me a Coffee Button -->
+        <div class="bmc-container">
+            <a class="bmc-button" href="https://buymeacoffee.com" target="_blank">
+                <img src="https://buymeacoffee.com" alt="Buy Me A Coffee">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let countdown;
+        let timeLeft = 180; 
+        let isMuted = false;
+        let isRunning = false;
+
+        const timerDisplay = document.getElementById('timer');
+        const instructionDisplay = document.getElementById('instruction');
+        const startBtn = document.getElementById('startBtn');
+        const muteBtn = document.getElementById('muteBtn');
+
+        const steps = [
+            { timeAt: 180, text: "⏳ Steeping... Let the coffee brew with the vacuum seal on.", beep: true },
+            { timeAt: 60,  text: "🔄 Swirl gently! Hold the brewer and give it a quick swirl.", beep: true },
+            { timeAt: 55,  text: "⏳ Settling... Let the grounds fall to the bottom.", beep: false },
+            { timeAt: 30,  text: "🛑 Plunge! Press down very gently. Take your time (~30s).", beep: true },
+            { timeAt: 0,   text: "✅ Done! Enjoy your perfect cup of coffee!", beep: true }
+        ];
+
+        function playBeep() {
+            if (isMuted) return;
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+                oscillator.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
+                console.log("Audio issues.");
+            }
+        }
+
+        function updateDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSeconds = seconds % 60;
+            timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+            
+            const currentStep = steps.find(step => seconds >= step.timeAt) || steps[steps.length - 1];
+            
+            if (instructionDisplay.textContent !== currentStep.text) {
+                instructionDisplay.textContent = currentStep.text;
+                if (currentStep.beep && isRunning) {
+                    playBeep();
+                }
+            }
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            startBtn.style.display = 'none';
+            
+            clearInterval(countdown);
+            updateDisplay(timeLeft);
+
+            countdown = setInterval(() => {
+                timeLeft--;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    updateDisplay(0);
+Körültekintően használja a kódot.
+isRunning = false;
+startBtn.textContent = 'BREW AGAIN';
+startBtn.style.display = 'inline-block';
+timeLeft = 180;
+return;
+}
+updateDisplay(timeLeft);
+}, 1000);
+}
+muteBtn.addEventListener('click', () => {
+isMuted = !isMuted;
+if (isMuted) {
+muteBtn.textContent = "🔇 Sound: MUTED";
+} else {
+muteBtn.textContent = "🔊 Sound: ON";
+}
+});
+startBtn.addEventListener('click', startTimer);
+
+
+
+*Ne felejtsd el átírni a kód alján az `IDE_JÖN_A_MÓDOSÍTOTT_NEVED` részt a saját Buy Me a Coffee felhasználónevedre, miután regisztráltál!*
+
+<FollowUp>
+Ha készen vagy, jelezz vissza:
+* Szükséged van segítségre a **GitHub Pages** beállításának lépéseivel?
+* Tesztelted már mobilon, és **minden gomb/elrendezés** megfelelően működik?
+</FollowUp>
