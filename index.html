@@ -166,19 +166,21 @@ html
 
         /* Buy Me a Coffee Section */
         .bmc-container {
-            margin-top: 25px;
+            margin-top: 30px;
             text-align: center;
+            display: flex;
+            justify-content: center;
         }
-
-        .bmc-button img {
-            height: 44px !important;
-            width: 190px !important;
+        
+        /* Custom adjustment to make the BMC official script look neat */
+        .bmc-btn-container {
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: inline-block;
             transition: transform 0.2s;
         }
-
-        .bmc-button:hover img {
+        .bmc-btn-container:hover {
             transform: scale(1.03);
         }
 
@@ -225,11 +227,9 @@ html
             </ol>
         </div>
 
-        <!-- Buy Me a Coffee Button -->
+        <!-- Buy Me a Coffee Button Widget -->
         <div class="bmc-container">
-            <a class="bmc-button" href="https://buymeacoffee.com" target="_blank">
-                <img src="https://buymeacoffee.com" alt="Buy Me A Coffee">
-            </a>
+            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="gaborboros" data-color="#40DCA5" data-emoji="☕"  data-font="Inter" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
         </div>
     </div>
 
@@ -295,15 +295,13 @@ html
             startBtn.style.display = 'none';
             
             clearInterval(countdown);
-            updateDisplay(timeLeft);
 
-            countdown = setInterval(() => {
-                timeLeft--;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    updateDisplay(0);
-Körültekintően használja a kódot.
+updateDisplay(timeLeft);
+countdown = setInterval(() => {
+timeLeft--;
+if (timeLeft <= 0) {
+clearInterval(countdown);
+updateDisplay(0);
 isRunning = false;
 startBtn.textContent = 'BREW AGAIN';
 startBtn.style.display = 'inline-block';
@@ -322,13 +320,3 @@ muteBtn.textContent = "🔊 Sound: ON";
 }
 });
 startBtn.addEventListener('click', startTimer);
-
-
-
-*Ne felejtsd el átírni a kód alján az `IDE_JÖN_A_MÓDOSÍTOTT_NEVED` részt a saját Buy Me a Coffee felhasználónevedre, miután regisztráltál!*
-
-<FollowUp>
-Ha készen vagy, jelezz vissza:
-* Szükséged van segítségre a **GitHub Pages** beállításának lépéseivel?
-* Tesztelted már mobilon, és **minden gomb/elrendezés** megfelelően működik?
-</FollowUp>
