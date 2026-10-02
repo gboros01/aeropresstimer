@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroPress Timer - James Hoffmann Formula</title>
     <meta name="description" content="A simple, mobile-friendly AeroPress timer following James Hoffmann's ultimate recipe. Perfect 3-minute coffee brewing guide with audio alerts.">
     <meta name="keywords" content="aeropress timer, james hoffmann aeropress, aeropress recipe, coffee timer, aeropress app">
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="BJKK6f3WVaviYMnpUCHqAIyYCFPOi_k7w1Y8_bKGx5k" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroPress Timer</title>
     <style>
         :root {
             --bg-color: #f4f1ea;
@@ -30,6 +30,30 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background-color: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #777;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+        .nav-link.active {
+            color: var(--accent-color);
+            background-color: rgba(74, 55, 40, 0.1);
         }
 
         /* Responsive Header & Mute Button */
@@ -112,7 +136,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             transition: transform 0.1s, background-color 0.2s;
             font-weight: bold;
-            width: 100%; /* Full width on mobile for easier tapping */
+            width: 100%;
             max-width: 280px;
             -webkit-tap-highlight-color: transparent;
         }
@@ -175,7 +199,6 @@
             justify-content: center;
         }
         
-        /* Custom adjustment to make the BMC official script look neat */
         .bmc-btn-container {
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             border-radius: 12px;
@@ -199,6 +222,11 @@
     </style>
 </head>
 <body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-link active">AeroPress</a>
+        <a href="frenchpress.html" class="nav-link">French Press</a>
+    </nav>
 
     <div class="header-controls">
         <button id="muteBtn">🔊 Sound: ON</button>
@@ -267,38 +295,32 @@
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
 
                 oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                oscillator.start();
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
-                oscillator.stop(audioCtx.currentTime + 0.15);
-            } catch (e) {
-                console.log("Audio issues.");
-            }
-        }
-
-        function updateDisplay(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainderSeconds = seconds % 60;
-            timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
-            
-            const currentStep = steps.find(step => seconds >= step.timeAt) || steps[steps.length - 1];
-            
-            if (instructionDisplay.textContent !== currentStep.text) {
-                instructionDisplay.textContent = currentStep.text;
-                if (currentStep.beep && isRunning) {
-                    playBeep();
-                }
-            }
-        }
-
-        function startTimer() {
-            if (isRunning) return;
-            isRunning = true;
-            startBtn.style.display = 'none';
-            
-            clearInterval(countdown);
-
+Körültekintően használja a kódot.
+gainNode.connect(audioCtx.destination);
+oscillator.start();
+gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+oscillator.stop(audioCtx.currentTime + 0.15);
+} catch (e) {
+console.log("Audio issues.");
+}
+}
+function updateDisplay(seconds) {
+const minutes = Math.floor(seconds / 60);
+const remainderSeconds = seconds % 60;
+timerDisplay.textContent = ${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds};
+const currentStep = steps.find(step => seconds >= step.timeAt) || steps[steps.length - 1];
+if (instructionDisplay.textContent !== currentStep.text) {
+instructionDisplay.textContent = currentStep.text;
+if (currentStep.beep && isRunning) {
+playBeep();
+}
+}
+}
+function startTimer() {
+if (isRunning) return;
+isRunning = true;
+startBtn.style.display = 'none';
+clearInterval(countdown);
 updateDisplay(timeLeft);
 countdown = setInterval(() => {
 timeLeft--;
