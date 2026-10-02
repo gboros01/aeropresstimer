@@ -1,4 +1,4 @@
-# ☕ James Hoffmann AeroPress Timer
+# ☕ AeroPress Timer
 
 A minimalist, mobile-friendly web utility built to time the perfect cup of coffee using **James Hoffmann's Ultimate AeroPress Technique**. 
 
