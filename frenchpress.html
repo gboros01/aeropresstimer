@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Press Timer - James Hoffmann Formula</title>
+    <meta name="description" content="The ultimate mobile-friendly French Press timer based on James Hoffmann's recipe. Precise 9-minute coffee brewing guide with smart audio alerts.">
+    <meta name="keywords" content="french press timer, james hoffmann french press, coffee timer, french press recipe">
+    <meta name="robots" content="index, follow">
+    <style>
+        :root {
+            --bg-color: #1a1613; /* Very dark coffee black */
+            --text-color: #e6dfd9; /* Off-white/cream text */
+            --accent-color: #d4a373; /* Warm gold/light coffee tone */
+            --button-bg: #4a3728; /* Deep rich brown */
+            --button-hover: #5c4432;
+            --card-bg: #26201b; /* Dark card background */
+            --meta-bg: #332a24;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background-color: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #8a7e75;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 15px;
+            transition: all 0.2s;
+        }
+        .nav-link.active {
+            color: var(--accent-color);
+            background-color: rgba(212, 163, 115, 0.15);
+        }
+
+        /* Responsive Header & Mute Button */
+        .header-controls {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        #muteBtn {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        #muteBtn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .container {
+            padding: 10px;
+            max-width: 450px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 0 0 5px 0;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #a69c93;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #timer {
+            font-size: 5.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        #instruction {
+            font-size: 1.3rem;
+            min-height: 4.5rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        #startBtn {
+            background-color: var(--button-bg);
+            color: #fff;
+            border: none;
+            padding: 16px 50px;
+            font-size: 1.3rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.1s, background-color 0.2s;
+            font-weight: bold;
+            width: 100%;
+            max-width: 280px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #startBtn:hover {
+            background-color: var(--button-hover);
+        }
+
+        #startBtn:active {
+            transform: scale(0.96);
+        }
+
+        /* Recipe Info Section */
+        .recipe-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 35px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .recipe-card h2 {
+            font-size: 1.15rem;
+            margin-top: 0;
+            color: var(--accent-color);
+            border-bottom: 1px solid #3d332b;
+            padding-bottom: 8px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            background: var(--meta-bg);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #d4ccb6;
+        }
+
+        .recipe-card ol {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .recipe-card li {
+            margin-bottom: 10px;
+            color: #cbc3ba;
+        }
+
+        /* Buy Me a Coffee Section */
+        .bmc-container {
+            margin-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .bmc-btn-container {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .bmc-btn-container:hover {
+            transform: scale(1.03);
+        }
+
+        /* Mobile specific tweaks */
+        @media (max-width: 400px) {
+            h1 { font-size: 1.8rem; }
+            #timer { font-size: 4.5rem; }
+            #instruction { font-size: 1.15rem; min-height: 4rem; }
+            .recipe-meta { flex-direction: column; gap: 5px; }
+            .recipe-card { padding: 15px; }
+            .recipe-card ol { padding-left: 15px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-link">AeroPress</a>
+        <a href="frenchpress.html" class="nav-link active">French Press</a>
+    </nav>
+
+    <div class="header-controls">
+        <button id="muteBtn">🔊 Sound: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>French Press Timer</h1>
+        <div class="subtitle">James Hoffmann's Formula</div>
+        
+        <div id="timer">09:05</div>
+        <div id="instruction">Ready? Pour the water, stir slightly, and press START immediately!</div>
+        <button id="startBtn">START BREW</button>
+
+        <!-- Recipe Details Card -->
+        <div class="recipe-card">
+            <h2>The Ultimate Recipe Breakdown</h2>
+            <div class="recipe-meta">
+                <span>☕ Coffee: 30g (Medium Coarse)</span>
+                <span>💧 Water: 500g (Boiling)</span>
+            </div>
+            <ol>
+                <li>Add coffee to the French Press, pour 500g of boiling water, and let it steep.</li>
+                <li><strong>[0:00 - 4:00]</strong> Let it steep for 4 minutes undisturbed.</li>
+                <li><strong>[4:00 - 4:05]</strong> Break the crust! Give the top layer a gentle stir.</li>
+                <li><strong>[4:05 - 4:15]</strong> Scoop out the floating white foam and remaining floating bits.</li>
+                <li><strong>[4:15 - 9:05]</strong> Wait 5 minutes for the coffee to settle and cool. **Do not plunge!**</li>
+                <li><strong>[9:05]</strong> Put the lid on, place the filter right on top of the liquid, and pour gently without plunging down.</li>
+            </ol>
+        </div>
+
+        <!-- Buy Me a Coffee Button Widget -->
+        <div class="bmc-container">
+            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="gaborboros" data-color="#40DCA5" data-emoji="☕"  data-font="Inter" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
+        </div>
+    </div>
+
+    <script>
+        let countdown;
+        let timeLeft = 545; // 9 minutes and 5 seconds total
+        let isMuted = false;
+        let isRunning = false;
+
+        const timerDisplay = document.getElementById('timer');
+        const instructionDisplay = document.getElementById('instruction');
+        const startBtn = document.getElementById('startBtn');
+        const muteBtn = document.getElementById('muteBtn');
+
+        const steps = [
+            { timeAt: 545, text: "⏳ Initial Steep... Let the coffee sit undisturbed for 4 minutes.", beep: true },
+            { timeAt: 305, text: "🥄 Break the crust! Give the top layer a gentle stir.", beep: true },
+            { timeAt: 300, text: "✨ Clean it up! Use spoons to scoop out the white foam and floating bits.", beep: true },
+            { timeAt: 290, text: "⏳ Settling & Cooling... Wait 5 minutes for the grounds to drop. Do not plunge!", beep: true },
+{ timeAt: 0,   text: "✅ Put the lid on, filter surface only, and pour gently. Enjoy!", beep: true }
+];
+function playBeep() {
+if (isMuted) return;
+try {
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const oscillator = audioCtx.createOscillator();
+const gainNode = audioCtx.createGain();
+oscillator.type = 'sine';
+oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+oscillator.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+oscillator.start();
+gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+oscillator.stop(audioCtx.currentTime + 0.15);
+} catch (e) {
+console.log("Audio issues.");
+}
+}
+function updateDisplay(seconds) {
+const minutes = Math.floor(seconds / 60);
+const remainderSeconds = seconds % 60;
+timerDisplay.textContent = ${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds};
+const currentStep = steps.find(step => seconds >= step.timeAt) || steps[steps.length - 1];
+if (instructionDisplay.textContent !== currentStep.text) {
+instructionDisplay.textContent = currentStep.text;
+if (currentStep.beep && isRunning) {
+playBeep();
+}
+}
+}
+function startTimer() {
+if (isRunning) return;
+isRunning = true;
+startBtn.style.display = 'none';
+clearInterval(countdown);
+updateDisplay(timeLeft);
+countdown = setInterval(() => {
+timeLeft--;
+if (timeLeft <= 0) {
+clearInterval(countdown);
+updateDisplay(0);
+isRunning = false;
+startBtn.textContent = 'BREW AGAIN';
+startBtn.style.display = 'inline-block';
+timeLeft = 545;
+return;
+}
+updateDisplay(timeLeft);
+}, 1000);
+}
+muteBtn.addEventListener('click', () => {
+isMuted = !isMuted;
+if (isMuted) {
+muteBtn.textContent = "🔇 Sound: MUTED";
+} else {
+muteBtn.textContent = "🔊 Sound: ON";
+}
+});
+startBtn.addEventListener('click', startTimer);
