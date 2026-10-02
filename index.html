@@ -198,17 +198,6 @@
             display: flex;
             justify-content: center;
         }
-        
-        .bmc-btn-container {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
-            display: inline-block;
-            transition: transform 0.2s;
-        }
-        .bmc-btn-container:hover {
-            transform: scale(1.03);
-        }
 
         /* Mobile specific tweaks */
         @media (max-width: 400px) {
@@ -224,8 +213,8 @@
 <body>
 
     <nav class="nav-bar">
-        <a href="index.html" class="nav-link active">AeroPress</a>
-        <a href="frenchpress.html" class="nav-link">French Press</a>
+        <a href="https://github.io" class="nav-link active">AeroPress</a>
+        <a href="https://github.io" class="nav-link">French Press</a>
     </nav>
 
     <div class="header-controls">
@@ -260,7 +249,7 @@
 
         <!-- Buy Me a Coffee Button Widget -->
         <div class="bmc-container">
-            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="gaborboros" data-color="#40DCA5" data-emoji="☕"  data-font="Inter" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
+            <script type="text/javascript" src="https://buymeacoffee.com" data-name="bmc-button" data-slug="gaborboros" data-color="#40DCA5" data-emoji="☕"  data-font="Inter" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
         </div>
     </div>
 
@@ -276,7 +265,7 @@
         const muteBtn = document.getElementById('muteBtn');
 
         const steps = [
-            { timeAt: 180, text: "⏳ Steeping... Let the coffee brew with the vacuum seal on.", beep: true },
+            { timeAt: 179, text: "⏳ Steeping... Let the coffee brew with the vacuum seal on.", beep: false },
             { timeAt: 60,  text: "🔄 Swirl gently! Hold the brewer and give it a quick swirl.", beep: true },
             { timeAt: 55,  text: "⏳ Settling... Let the grounds fall to the bottom.", beep: false },
             { timeAt: 30,  text: "🛑 Plunge! Press down very gently. Take your time (~30s).", beep: true },
@@ -295,12 +284,13 @@
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
 
                 oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+                oscillator.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
 Körültekintően használja a kódot.
-gainNode.connect(audioCtx.destination);
-oscillator.start();
-gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
-oscillator.stop(audioCtx.currentTime + 0.15);
-} catch (e) {
 console.log("Audio issues.");
 }
 }
@@ -320,8 +310,9 @@ function startTimer() {
 if (isRunning) return;
 isRunning = true;
 startBtn.style.display = 'none';
+playBeep();
 clearInterval(countdown);
-updateDisplay(timeLeft);
+instructionDisplay.textContent = "⏳ Steeping... Let the coffee brew with the vacuum seal on.";
 countdown = setInterval(() => {
 timeLeft--;
 if (timeLeft <= 0) {
